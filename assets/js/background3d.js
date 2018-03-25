@@ -5,8 +5,8 @@ var scene = new THREE.Scene();
 scene.fog = new THREE.Fog(0xffffff, 200, 350);
 
 var camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-camera.position.set(-80, -130, 100);
-camera.lookAt(new THREE.Vector3(-80, 40, 100));
+camera.position.set(-80, -130, 105);
+camera.lookAt(new THREE.Vector3(-80, 40, 105));
 
 var mainCanvas = document.getElementById('main-canvas');
 var renderer = new THREE.WebGLRenderer({ antialias: true, canvas: mainCanvas, alpha: true });
