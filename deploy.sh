@@ -25,7 +25,7 @@ git commit -m 'rebuild pages' --allow-empty
 git push origin master
 cd ..
 
-if [unameOut = "Darwin"]
+if [machine = "Darwin"]
 then 
     sed -e '10s#url: \"https://avkudr.github.io\"#url: \".\"#' -i '' _config.yml
 fi
