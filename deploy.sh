@@ -13,7 +13,7 @@ case "${unameOut}" in
     *)          machine="UNKNOWN:${unameOut}"
 esac
 
-if [unameOut = "Darwin"]
+if [machine = "Darwin"]
 then 
     sed -e '10s#url: \".\"#url: \"https://avkudr.github.io\"#' -i '' _config.yml
 fi
