@@ -186,10 +186,12 @@ markdown    : kramdown
 highlighter : rouge
 permalink   : date
 
+include:
+  - Gemfile
+  
 exclude:
   - CHANGELOG.md
   - HOW_TO_RELEASE.md
-  - Gemfile
   - Gemfile.lock
   - LICENSE
   - README-*.md
@@ -228,6 +230,16 @@ plugins:
   - jekyll-sitemap
   - jekyll-scholar
   - jekyll/scholar
+  - jemoji
+
+  # mimic GitHub Pages with --safe
+whitelist:
+  - jekyll-paginate
+  - jekyll-sitemap
+  - jekyll-scholar
+  - jekyll/scholar
+  - jekyll-gist
+  - jekyll-feed
   - jemoji
 
 scholar:
