@@ -4,4 +4,4 @@ source "https://rubygems.org"
 gemspec
 
 gem 'unicode'
-gem 'jekyll-scholar'
+gem 'jekyll-scholar', group: :jekyll_plugins
