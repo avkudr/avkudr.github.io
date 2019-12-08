@@ -222,13 +222,12 @@ defaults:
 ## => Plugins
 ##############################
 
-gems: ['jekyll/scholar']
-
 plugins:
   - jekyll-feed
   - jekyll-paginate
   - jekyll-sitemap
   - jekyll-scholar
+  - jekyll/scholar
   - jemoji
 
 scholar:
