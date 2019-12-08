@@ -1,0 +1,17 @@
+header:
+  - title:      Home
+    url:        /
+  - title:      Blog
+    url:        /blog/
+    key:        blog
+  - title:      Projects
+    url:        /projects.html
+    key:        projects
+  - title:      Portfolio
+    url:        /portfolio.html
+    key:        portfolio
+  - title:      Publications
+    url:        /publications.html
+    key:        publications
+  - title:      Archive
+    url:        /archive.html

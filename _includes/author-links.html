@@ -1,0 +1,144 @@
+{%- assign _author = include.author -%}
+
+<div class="author-links">
+  <ul class="menu menu--nowrap menu--inline">
+
+    {%- if _author.url -%}
+      <link itemprop="url" href="{{ _author.url }}">
+    {%- endif -%}
+
+    {%- if _author.type == 'organization' -%}
+      {%- include snippets/get-locale-string.html key='EMAIL_US' -%}
+      {%- assign _locale_string_email = __return -%}
+      {%- include snippets/get-locale-string.html key='FOLLOW_US' -%}
+      {%- assign _locale_string_follow = __return -%}
+    {%- else -%}
+      {%- include snippets/get-locale-string.html key='EMAIL_ME' -%}
+      {%- assign _locale_string_email = __return -%}
+      {%- include snippets/get-locale-string.html key='FOLLOW_ME' -%}
+      {%- assign _locale_string_follow = __return -%}
+    {%- endif -%}
+
+    {%- include snippets/get-locale-string.html key='EMAIL_ME' -%}
+    {%- if _author.email -%}
+      <li title="{{ _locale_string_email }}">
+      <a class="button button--circle mail-button" itemprop="email" href="mailto:{{ _author.email }}" target="_blank">
+        <i class="fas fa-envelope"></i>
+      </a>
+    {%- endif -%}
+
+
+    {%- if _author.facebook -%}
+      <li title="{{ _locale_string_follow | replace: '[NAME]', 'Facebook' }}">
+        <a class="button button--circle facebook-button" itemprop="sameAs" href="https://www.facebook.com/{{ _author.facebook }}" target="_blank">
+          <div class="icon">{%- include svg/icon/social/facebook.svg -%}</div>
+        </a>
+      </li>
+    {%- endif -%}
+
+    {%- if _author.twitter -%}
+      <li title="{{ _locale_string_follow | replace: '[NAME]', 'Twitter' }}">
+        <a class="button button--circle twitter-button" itemprop="sameAs" href="https://twitter.com/{{ _author.twitter }}" target="_blank">
+          <div class="icon">{%- include svg/icon/social/twitter.svg -%}</div>
+        </a>
+      </li>
+    {%- endif -%}
+
+    {%- if _author.weibo -%}
+      <li title="{{ _locale_string_follow | replace: '[NAME]', 'Weibo' }}">
+        <a class="button button--circle weibo-button" itemprop="sameAs" href="https://weibo.com/{{ _author.weibo }}" target="_blank">
+          <div class="icon">{%- include svg/icon/social/weibo.svg -%}</div>
+        </a>
+      </li>
+    {%- endif -%}
+
+    {%- if _author.googleplus -%}
+      <li title="{{ _locale_string_follow | replace: '[NAME]', 'Google+' }}">
+        <a class="button button--circle googlepluse-button" itemprop="sameAs" href="https://plus.google.com/u/0/{{ _author.googleplus }}" target="_blank">
+          <div class="icon">{%- include svg/icon/social/googleplus.svg -%}</div>
+        </a>
+      </li>
+    {%- endif -%}
+
+    {%- if _author.telegram -%}
+      <li title="{{ _locale_string_follow | replace: '[NAME]', 'Telegram' }}">
+        <a class="button button--circle telegram-button" itemprop="sameAs" href="https://t.me/{{ _author.telegram }}" target="_blank">
+          <div class="icon">{%- include svg/icon/social/telegram.svg -%}</div>
+        </a>
+      </li>
+    {%- endif -%}
+
+    {%- if _author.medium -%}
+      <li title="{{ _locale_string_follow | replace: '[NAME]', 'Medium' }}">
+        <a class="button button--circle medium-button" itemprop="sameAs" href="https://medium.com/{{ _author.medium }}" target="_blank">
+          <div class="icon">{%- include svg/icon/social/medium.svg -%}</div>
+        </a>
+      </li>
+    {%- endif -%}
+
+    {%- if _author.zhihu -%}
+      <li title="{{ _locale_string_follow | replace: '[NAME]', 'Zhihu' }}">
+        <a class="button button--circle zhihu-button" itemprop="sameAs" href="https://www.zhihu.com/people/{{ _author.zhihu }}" target="_blank">
+          <div class="icon">{%- include svg/icon/social/zhihu.svg -%}</div>
+        </a>
+      </li>
+    {%- endif -%}
+
+    {%- if _author.douban -%}
+      <li title="{{ _locale_string_follow | replace: '[NAME]', 'Douban' }}">
+        <a class="button button--circle douban-button" itemprop="sameAs" href="https://www.douban.com/people/{{ _author.douban }}" target="_blank">
+          <div class="icon">{%- include svg/icon/social/douban.svg -%}</div>
+        </a>
+      </li>
+    {%- endif -%}
+
+    {%- if _author.linkedin -%}
+      <li title="{{ _locale_string_follow | replace: '[NAME]', 'Linkedin' }}">
+        <a class="button button--circle linkedin-button" itemprop="sameAs" href="https://www.linkedin.com/in/{{ _author.linkedin }}" target="_blank">
+          <div class="icon">
+            <svg class="social__icon" viewBox="0 0 1000 1000" width="40px" height="40px" style=" width: 40px; height: 40px;" alt="LinkedIn"><path d="M589.3,430.4c-41.9,0-60.7,23.1-71.1,39.2V436h-79c1,22.3,0,237.7,0,237.7h79V540.9c0-7.1,0.5-14.2,2.6-19.3c5.7-14.2,18.7-28.9,40.5-28.9c28.6,0,40,21.8,40,53.8v127.2h79h0V537.3C680.2,464.3,641.2,430.4,589.3,430.4z M518.1,470.4h-0.5c0.2-0.3,0.4-0.5,0.5-0.8V470.4z"></path><rect x="316.4" y="436" width="79" height="237.7"></rect><path d="M500,10C229.8,10,10,229.8,10,500c0,270.2,219.8,490,490,490c270.2,0,490-219.8,490-490C990,229.8,770.2,10,500,10z M759.8,721.6c0,20.9-17.3,37.7-38.7,37.7H275.5c-21.3,0-38.6-16.8-38.6-37.7V270.7c0-20.8,17.3-37.7,38.6-37.7h445.7c21.3,0,38.7,16.9,38.7,37.7V721.6z"></path><path d="M356.4,321.4c-27,0-44.7,17.7-44.7,41.1c0,22.8,17.2,41.1,43.6,41.1h0.5c27.6,0,44.7-18.3,44.7-41.1C400.1,339.1,383.4,321.4,356.4,321.4z"></path></svg>
+          </div>
+        </a>
+      </li>
+    {%- endif -%}
+
+    {%- if _author.github -%}
+      <li title="{{ _locale_string_follow | replace: '[NAME]', 'Github' }}">
+        <a class="button button--circle github-button" itemprop="sameAs" href="https://github.com/{{ _author.github }}" target="_blank">
+          <div class="icon">
+            <svg class="social__icon" viewBox="0 0 15.8 15.8" width="40px" height="40px" style=" width: 40px; height: 40px;"><path d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"></path></svg>
+          </div>
+        </a>
+      </li>
+    {%- endif -%}
+    
+    {%- if _author.google_scholar -%}
+      <li title="{{ _locale_string_follow | replace: '[NAME]', 'Google Scholar' }}">
+        <a class="button button--circle github-button" itemprop="sameAs" href="https://scholar.google.fr/citations?user={{ _author.google_scholar }}" target="_blank">
+          <div class="icon">
+            <svg class="social__icon" viewBox="0 -1 28 28" width="40px" height="40px" style=" width: 40px; height: 40px;"><path d="M13.23 0A13.23 13.23 0 0 0 0 13.23a13.23 13.23 0 0 0 13.23 13.23 13.23 13.23 0 0 0 13.23-13.23A13.23 13.23 0 0 0 13.23 0zm2.5 5.68c4.08 0 4.17 0 4.17.1 0 .04-.08.15-.17.23-.64.57-.67.7-.4 1.48l.15.46.03 1.4c.01.76.04 1.69.06 2.05.02.37.03.87 0 1.13-.05.74-.2.92-.7.88-.61-.05-.64-.22-.55-3.75L18.36 8l.13-.34c.07-.2.15-.43.16-.54.05-.34.05-.34-1.47.84-.62.48-.64.5-.65.68-.01.1.05.4.14.74a2.45 2.45 0 0 1-.66 2.67l-.54.46c-.55.46-.72.8-.6 1.21.09.37.32.62 1.07 1.18.39.29.78.6.87.72.4.47.62 1.13.62 1.91 0 .88-.21 1.42-.8 2-.2.2-.48.43-.63.51a6.37 6.37 0 0 1-3.7.72l-.4-.07a5.65 5.65 0 0 1-2.01-.77 2.94 2.94 0 0 1-.89-.97c-.2-.4-.23-.97-.08-1.42.48-1.42 1.93-2.26 4.16-2.4.28-.02.5-.05.5-.06l-.14-.27a1.82 1.82 0 0 1-.2-1.36l.07-.2h-.27a5 5 0 0 1-1.35-.25c-1.05-.39-1.7-1.23-1.9-2.5l-.06-.32-1.58-.01a8.42 8.42 0 0 1-1.6-.07c0-.03.9-.84 2.02-1.8l2.5-2.19.48-.41zm-2.88 1.85a.64.64 0 0 0-.2.03c-.74.13-1.2.59-1.42 1.38a3.6 3.6 0 0 0 .02 1.46c.32 1.23 1.22 2.24 2.22 2.48.13 0 .26.03.4.01.72-.03 1.33-.67 1.53-1.6.1-.46.08-.87-.05-1.36-.35-1.41-1.45-2.44-2.5-2.4zm.43 8c-.35 0-.71.05-1 .12-.86.23-1.53.7-1.81 1.28-.15.3-.15.32-.15.87 0 .56 0 .59.15.89.37.76 1.28 1.3 2.43 1.45.42.05 1.15.01 1.6-.1.96-.22 1.64-.77 1.86-1.5.1-.3.09-.92-.02-1.29-.24-.77-1.03-1.39-2.1-1.65a4 4 0 0 0-.96-.07z"></path></svg>
+          </div>
+        </a>
+      </li>
+    {%- endif -%}
+
+    {%- if _author.researchgate -%}
+      <li title="{{ _locale_string_follow | replace: '[NAME]', 'ResearchGate' }}">
+        <a class="button button--circle github-button" itemprop="sameAs" href="https://www.researchgate.net/profile/{{ _author.researchgate }}" target="_blank">
+          <div class="icon">
+            <svg class="social__icon" viewBox="0 -4 104 104" width="40px" height="40px" style=" width: 40px; height: 40px;"><path d="m50 0a50 50 0 0 0 -50 50 50 50 0 0 0 50 50 50 50 0 0 0 50 -50 50 50 0 0 0 -50 -50zm20.211 18.814c4.7516 0.064629 7.0317 2.1067 7.6445 5.4824 0 0.88294-2.8211 1.7539-3.3867 1.2051-0.73743-1.2773-0.90688-2.9067-4.9805-3.1895-3.8448 0-5.6641 0.7665-5.6641 8.8535 0 9.1753 1.6577 9.9297 5.8926 9.9297 1.1409 0 5.1426-0.61602 5.1426-6.0547 0.17775-1.9206-2.9968-1.2715-5.2402-1.3359v-3.0586h9.2441v1.5293h-0.58594v4.3301c0 2.9842-1.1977 8.277-8.8867 8.1387-8.0251 0-9.084-4.5715-9.084-13.283 0-9.9125 2.2292-12.533 8.9219-12.533 0.33899-0.013465 0.66565-0.01798 0.98242-0.013672zm-40.002 14.674c19.212-0.15813 25.081 2.566 25.045 12.479-0.021789 5.9133-6.0225 12.598-11.432 13.02 10.427 16.657 12.145 20.201 19.072 20.201 0 1.0535 0.25785 1.8794-0.82812 2h-5.5723c-3.7499-1.2376-6.9358-1.3977-18.416-21.426l-5.5586 0.033203v12.508c0.20326 5.9444 3.665 5.7463 7.0781 5.9844v2.332h-4.4648v0.003906c-4.3353-0.98336-7.2353-0.64235-9.8984-0.082031v0.001953h-4.0527v-2.3477c2.4724-0.25568 5.266 0.0416 5.6172-3.8672v-34.346c0-2.542-1.9029-2.6925-5.6621-3.8223v-2.4395-0.001953c3.311-0.12767 6.3276-0.20788 9.0723-0.23047zm4.2402 3.8477c-0.73696 0.00343-1.3964 0.015624-1.9434 0.015624v18.33c3.575 0 16.012 1.6553 16.012-9.084 0-8.8299-8.9096-9.2857-14.068-9.2617z"></path></svg>
+          </div>
+        </a>
+      </li>
+    {%- endif -%}   
+
+    {%- if _author.npm -%}
+      <li title="{{ _locale_string_follow | replace: '[NAME]', 'npm' }}">
+        <a class="button button--circle npm-button" itemprop="sameAs" href="https://www.npmjs.com/~{{ _author.npm }}" target="_blank">
+          <div class="icon">{%- include svg/icon/social/npm.svg -%}</div>
+        </a>
+      </li>
+    {%- endif -%}
+
+  </ul>
+</div>

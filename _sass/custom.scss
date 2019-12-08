@@ -1,0 +1,109 @@
+.btn,
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+  position: relative;
+  display: inline-block;
+  padding: 18px 30px;
+  font-size: 11px;
+  font-family: inherit;
+  line-height: 1.5;
+  letter-spacing: 0.2em;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  color: #dce6f0;
+  background-color: #25292e;
+  text-align: center;
+  border: 0;
+  border-radius: 0;
+  transition: all 0.45s cubic-bezier(0.25, 1, 0.33, 1);
+  outline: 0;
+
+  &::after {
+    display: none;
+  }
+
+  &:hover,
+  :focus,
+  :active {
+    color: #dce6f0;
+    background-color: lighten(#25292e, 14%);
+    outline: 0;
+  }
+}
+
+.btn + .btn {
+  margin-top: 2em;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: .65;
+  transition: background-color .2s ease;
+
+  &:hover,
+  :focus {
+    background-color: #25292e;
+  }
+}
+
+#bibtexbutton,
+input[type="btnBibBlue"],
+input[type="btnBibGreen"],
+input[type="btnBibOrange"]{
+  padding:0;
+  margin-top:5px;
+  line-height: 1;
+  letter-spacing: 0.0em;
+  text-transform: lowercase;
+  display: inline;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: bold;
+  max-width: 70px;
+  height: 23px;
+  padding-top: 0;
+  padding-bottom: 0;
+  color: #f6f8fa;
+  text-align: center;
+  border: 0;
+  border-radius: 3px;
+  transition: all 0.45s cubic-bezier(0.25, 1, 0.33, 1);
+  outline: 0;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  &::after {
+    display: none;
+  }
+}
+
+input[type="btnBibGreen"]{
+  background-color: #009999;
+  &:hover, :focus, :active {
+    background-color: teal;
+  }
+} 
+
+#bibtexbutton,
+input[type="btnBibBlue"]{
+  background-color: #5bc0de;
+  &:hover, :focus, :active {
+    background-color: #46b8da;
+  }
+} 
+
+input[type="btnBibOrange"]{
+  background-color: #f0ad4e;
+  &:hover, :focus, :active {
+    background-color: #eea236;
+  }
+} 

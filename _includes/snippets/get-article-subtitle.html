@@ -1,0 +1,11 @@
+{%- assign _subtitle = include.article.subtitle | default: layout.subtitle -%}
+{%- assign _subtitles = include.article.subtitles | default: layout.subtitles -%}
+
+{%- if _subtitle -%}
+  {%- assign __return = _subtitle -%}
+{%- elsif _subtitles -%}
+  {%- include snippets/get-string-from-locale-config.html locale=_subtitles -%}
+  {%- assign __return = __return -%}
+{%- else -%}
+  {%- assign __return = nil -%}
+{%- endif -%}

@@ -1,0 +1,42 @@
+---
+---
+<div class="text-justify">{{ reference }}</div>
+<input id="bibtexbutton" type="btnBibGreen" onclick="toggleBibtex{{entry.key}}()" value="bibtex &#x25BC;" readonly="readonly"/>
+<div style="display:inline-block; width: 30px;"> </div>
+
+{% if entry.doi %}
+    <a href="{{ entry.doi | prepend: 'http://doi.org/' }}"><input class="button1" type="button" value="doi" readonly/></a>
+{% endif %}
+ 
+{% if entry.pdf %}
+    <a href="{{ entry.pdf }}"><input type="btnBibGreen" value="pdf" readonly/></a>
+{% endif %}
+ 
+{% if entry.web %}
+    <a href="{{ entry.web }}"><input type="btnBibOrange" value="web" readonly/></a>
+{% endif %}
+ 
+{% if entry.code %}
+    <a href="{{ entry.code }}"><input type="btnBibOrange" value="code" readonly/></a>
+{% endif %}
+
+{% if entry.video %}
+    <a href="{{ entry.video }}"><input type="btnBibOrange" value="video" readonly/></a>
+{% endif %}
+
+<div id="a{{entry.key}}" style="display: none; font-size: 10px;">
+<pre style="font-size: 13px;">{{entry.bibtex}}</pre>
+</div>
+<p></p>
+
+<script>
+
+function toggleBibtex{{entry.key}}(parameter) {
+    var x= document.getElementById('a{{entry.key}}');
+    if (x.style.display === 'none') {
+        x.style.display = 'block';
+    } else {
+        x.style.display = 'none';
+    }
+}
+</script>
