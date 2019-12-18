@@ -3,7 +3,69 @@
 {%- assign _highcharts = page.highcharts | default: layout.highcharts -%}
 {%- if _highcharts -%}
   <script src="https://code.highcharts.com/highcharts.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+  <script>
+    var fontSize = '0.9rem';
+    Highcharts.theme = {
+      chart: {
+        //borderWidth: 2,
+        //plotBackgroundColor: 'rgba(255, 255, 255, .9)',
+        //plotShadow: true
+        //plotBorderWidth: 1
+      },
+      title: {
+        style: {
+          fontSize: fontSize
+        }
+      },
+      subtitle: {
+        style: {
+          fontSize: fontSize
+        }
+      },
+      xAxis: {
+        labels: {
+          style: {
+            fontSize: fontSize
+          }
+        },
+        title: {
+          style: {
+            fontSize: fontSize
+          }
+        }
+      },
+      yAxis: {
+        labels: {
+          style: {
+            fontSize: fontSize
+          }
+        },
+        title: {
+          style: {
+            fontSize: fontSize
+          }
+        }
+      },
+      legend: {
+        itemStyle: {
+          fontSize: fontSize
+        }
+      }
+    };
+
+    Highcharts.setOptions(Highcharts.theme);
+    Highcharts.setOptions({
+      global: {
+        useUTC: false
+      }
+    });
+
+  </script>
+{%- endif -%}
+
+{%- assign _nouislider = page.nouislider | default: layout.nouislider -%}
+{%- if _nouislider -%}
+  <script src="/assets/nouislider.min.js"></script>
 {%- endif -%}
 
 <!-- end custom article top snippet -->

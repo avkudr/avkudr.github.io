@@ -97,6 +97,7 @@ mermaid: # false (default), true
 chart: # false (default), true
 
 highcharts: false
+nouislider: false
 
 ## => Paginate
 ##############################

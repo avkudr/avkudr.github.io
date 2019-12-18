@@ -1,3 +1,8 @@
 <!-- start custom head snippets -->
 
+{%- assign _nouislider = page.nouislider | default: layout.nouislider -%}
+{%- if _nouislider -%}
+  <link rel="stylesheet" type="text/css" href="/assets/nouislider.min.css">
+{%- endif -%}
+
 <!-- end custom head snippets -->
