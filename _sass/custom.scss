@@ -10,6 +10,15 @@ blockquote.keypoints {
   color: $text-color;
 }
 
+.graph_responsive{
+  width:85%; 
+  height:400px;
+  margin: 0 auto;
+  @media (max-width: 480px){
+    width:100%; 
+  }
+}
+
 .slider {
   -webkit-appearance: none;
   height: 15px;

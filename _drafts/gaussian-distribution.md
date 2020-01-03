@@ -13,28 +13,32 @@ modify_date: 2019-12-08
 private_nbTries_: 20
 ---
 
-Bad news: every time you measure something, you never get the true value because every measuring device has an uncertainty which actually defines its quality. <!--more-->
-One of the most common ways to define the measuring uncertainty is to use a plus-minus sign. You can quite often hear that the weight of the box you have to lift to the forth floor is *15* ± *5* kg. What does ± actually says about the true value of the box weight? It can be either *12*, *19*, *15* or *13.486*. All of this values are equally likely. In probability theory this case is described by a **uniform distribution**. 
+This is the first article in a small series (I hope) realted to the Kalman filter. The main goal is to provide some intuition on why we use normal distibution and how we combine *data (measurements)* from different sources (model and sensor, multiple sensors, etc.) <!--more-->
+
+### Accept the imperfection
+
+As you most certainly know, the world isn't perfect. Every time you measure something, you never get the true value because every measuring device has an uncertainty which actually defines its quality. 
+One of the most common (non-scientific) ways to define the measuring uncertainty is to use a plus-minus sign. You can quite often hear that the weight of the box you have to lift to the forth floor is *15* ± *5* kg. What does ± actually says about the true value of the box weight? It can be either *12*, *19*, *15* or *13.486*. All of this values are equally likely. In probability theory this case is described by a **uniform distribution**. 
 
 <!-- It may also be referred to as rectangular distribution. In order to say that the variable $$X$$ takes its value from the uniform distribution with the range $$[a,b]$$ we will use the following notation: $$ X \sim U(a,b) $$ -->
 
-With the uniform distribution it is quite easy to calculate the probability that a random variable equals any particular value inside the uncertainty range (±*5* in our case). If the value is outside the range the probability equal zero. For example, the probability of the weight to be *16* kg is 10%:
+With the uniform distribution it is quite easy to calculate the probability that a random variable equals any particular value inside the uncertainty range (±*5* in our case). For example, what is the probability of the weight to be *16* kg:
 
 $$ P(X = 16) = {1 \over {b - a}} = {1 \over {5 - (-5)}} = 0.1 = 10\%$$
 
 <!-- The probability that a normal random variable X equals any particular value is 0. -->
 
-However, uniform is not the best way to represent measurement uncertainty. In fact, if the voltmeter shows you the value of 12V you expect it to be close to this value. In other words it is common to think that the value of *11.99*V is much more likely than the value of 10V even if you know that the measurement uncertainty of the device is 2V. While in this case the uniform distribution doesn't work anymore, we can model this situation with **Gaussian** (aka normal) **distribution**.
+Answer: 10%. By the way, for all the values outside of our uncertainty the range the probability equals zero. While it is easy to calculate the probability, uniform distribution is not the best way to represent measurement uncertainty. In fact, if the voltmeter shows you the value of 12V you expect it to be close to this value. In other words it is common to think that the value of *11.99*V is much more likely than the value of 10V even if you know that the measurement uncertainty of the device is 0.05V. While in this case the uniform distribution doesn't work anymore, we can model this situation with **Gaussian** (aka normal) **distribution**.
 
 ### Why Gaussian distribution?
 
 Why normal distribution and not any other non-uniform distribution? The main reason for that is the central limit theorem. It states that "when independent random variables are added, their properly normalized sum tends toward a normal distribution (informally a "bell curve") even if the original variables themselves are not normally distributed" [\[wiki\]](https://en.wikipedia.org/wiki/Central_limit_theorem).
 
-To confirm this fact, let's use a coin flip simulation. The experiment consists in following. We toss a coin {{ page.private_nbTries_ }} times and write down the number of heads which can go from 0 to {{ page.private_nbTries_ }}. Then we repeat the experiment 50 or 5000 times. When running the experiment for 50 times it difficult to see any pattern. However, after 5000 tries we see that the graph becomes to look like a bell curve witch can be closely approximated by Gaussian distribution.
+To confirm this fact, let's use a coin flip simulation. The experiment consists in following. We toss a coin {{ page.private_nbTries_ }} times and write down the number of heads which can go from 0 to {{ page.private_nbTries_ }}. Then we repeat the experiment 50 or 5000 times. When running the experiment for 50 times it is difficult to see any pattern. However, after 5000 tries we see that the graph starts to look like a bell curve witch can be closely approximated by Gaussian distribution. As you've already guessed, this is one of the reasons why we assume normal distribution in Kalman filter.
 
 <input type="btnBlue" onclick="simulateGauss(50)"   value="Run 50 times"   readonly="readonly"/>
 <input type="btnBlue" onclick="simulateGauss(5000)" value="Run 5000 times" readonly="readonly"/>
-<div id="gaussSimulation" style="width:100%; height:400px;"></div>
+<div class="graph_responsive" id="gaussSimulation"></div>
 <script>
 {
   var nbTries = {{ page.private_nbTries_ }};
@@ -124,11 +128,13 @@ To confirm this fact, let's use a coin flip simulation. The experiment consists 
 
 ### Properties of Gaussian distribution
 
-Gaussian distribution is defined by two variables, mean ($$\mu$$) and variance ($$\sigma^2$$), and has the following notation:
+Another nice fact is that we need only two variables to define Gaussian distribution: mean ($$\mu$$) and variance ($$\sigma^2$$), and has the following notation:
 
 $$ X \sim \mathcal{N}(\mu,\,\sigma^{2}) $$
 
-And the probability density function has the following form:
+which says that some random variable $$X$$ follows normal distribution with mean $$\mu$$ and variance $$\sigma^2$$.
+
+However, in order to extract the propability we have to use a probability density function (PDF). And in case of Gaussian, it has the following form:
 
 $$
 \begin{equation} \label{gaussiandistrib} 
@@ -138,17 +144,21 @@ f(x) = \frac{1}{\sigma\sqrt{2 \pi}}e^{ - {1\over{2}} \left ( \frac{x-\mu}{\sigma
 \end{equation}
 $$
 
-Gaussian distribution has several interesting properties:
-* as you can see from the graph, different values of random variable (voltage in our last example) have now different probability. The closer the value to the mean $$\mu$$, the higher is its probability
-* we can't calculate the probability of variable taking one particular value. In fact, in case of normal distribution, the probability is calculated as the surface
-below the curve (integral) in some range $$[x_1,x_2]$$, so the probability of one value is equal to 0
-* the probability of a variable to be in the range of $$[\mu-3\sigma,\mu+3\sigma]$$ is 99.73%
-* the probability of a variable to be in the range of $$[\mu-2\sigma,\mu+2\sigma]$$ is 95.45%
-* the probability of a variable to be in the range of $$[\mu-\sigma,\mu+\sigma]$$ is 68.27%
-* the integral of the gaussian distribution in the range $$(-\infty,\infty)$$ is equal to 1
+One of the important properties of this function is the fact that the total area under the curve is equal to 1. In other words, we are 100% sure that the random variable $$X$$ will take the value from the range $$(-\infty,\infty)$$; something will happen, we guarantee. Could we do better than that? What is the probability of one exact value, let's say $$\mu$$? The answer is zero:
+
+$$ P(X = \mu) = ? $$
+
+In order to find the probabilty from probability density function, we need to find the area under the curve in the given range. In case of one particular value, the width of the range equals zero, so the probability is also zero. It means that we can only estimate the probability in a range: $$ P(x_1 < X \leq x_2) $$.
+
+Some interesting properties of normal distribution:
+* probability density function is symmetric around the mean
+* probability of a variable to be in the range of $$[\mu-3\sigma,\mu+3\sigma]$$ is 99.73%
+* probability of a variable to be in the range of $$[\mu-2\sigma,\mu+2\sigma]$$ is 95.45%
+* probability of a variable to be in the range of $$[\mu-\sigma,\mu+\sigma]$$ is 68.27%
+* probability of a variable to be in the range of $$(-\infty,\mu]$$ or $$(\mu,\infty)$$ is 50.00%
 
 <div id="double-slider"></div>
-<div id="gaussProba" style="width:100%; height:400px;"></div>
+<div id="gaussProba" style="width:100%;height:400px"></div>
 <script>
 {
   var y = [0.001338, 0.008727, 0.044318, 0.175283, 0.539910, 1.295176, 2.419707, 3.520653, 3.989423, 3.520653, 2.419707, 1.295176, 0.539910, 0.175283, 0.044318, 0.008727, 0.001338];
@@ -200,8 +210,8 @@ below the curve (integral) in some range $$[x_1,x_2]$$, so the probability of on
       }
     },
     tooltip: {
-      headerFormat: '<span style="font-size:12px">{point.key}' + headerPostFix + '</span><table>',
-      pointFormat: '<tr><td style="color:{series.color};padding:0">Number of outcomes: </td>' +
+      headerFormat: '<span style="font-size:12px">{point.key}</span><table>',
+      pointFormat: '<tr><td style="color:{series.color};padding:0">f(x) = </td>' +
         '<td style="padding:0"><b>{point.y:.0f}</b></td></tr>',
       footerFormat: '</table>',
       shared: true,
@@ -224,7 +234,7 @@ below the curve (integral) in some range $$[x_1,x_2]$$, so the probability of on
       }
     },
     series: [{
-      name: 'Random variable X',
+      name: 'Random variable X ~ N(0,0.1)',
       color: 'rgb(63, 184, 175,0.6)',
       data: dataXY,
       zIndex: 2
@@ -236,8 +246,7 @@ below the curve (integral) in some range $$[x_1,x_2]$$, so the probability of on
   noUiSlider.create(slider, {
     start: [-0.2, 0.2],
     connect: true,
-    step: 0.01,
-    margin: 0.01,
+    step: 0.1,
     range: {
       'min': -0.4,
       'max': 0.4
@@ -245,10 +254,33 @@ below the curve (integral) in some range $$[x_1,x_2]$$, so the probability of on
   });
 
   slider.noUiSlider.on('update', function (values, handle) {
+    var sl = values[0] / 0.1;
+    var sr = values[1] / 0.1;
+    var P = 0;
+    if (sl == sr) P = 0;
+    else {
+      var signL = sl / Math.abs(sl);
+      var signR = sr / Math.abs(sr);
+
+      if (Math.abs(sl) < 0.1) sl = 0;
+      else if (Math.abs(sl) < 1.1) sl = signL * 68.27/2;
+      else if (Math.abs(sl) < 2.1) sl = signL * 95.45/2;
+      else if (Math.abs(sl) < 3.1) sl = signL * 99.73/2;
+      else if (Math.abs(sl) < 4.1) sl = signL * 50;
+
+      if (Math.abs(sr) < 0.1) sr = 0;
+      else if (Math.abs(sr) < 1.1) sr = signR * 68.27/2;
+      else if (Math.abs(sr) < 2.1) sr = signR * 95.45/2;
+      else if (Math.abs(sr) < 3.1) sr = signR * 99.73/2;
+      else if (Math.abs(sr) < 4.1) sr = signR * 50;
+
+      P = Math.abs(sr - sl);
+    }
+
     myChartProba.xAxis[0].plotLinesAndBands[0].options.from = parseFloat(values[0]);
     myChartProba.xAxis[0].plotLinesAndBands[0].options.to = parseFloat(values[1]);
     myChartProba.xAxis[0].plotLinesAndBands[0].label.attr({
-      text: '(x1;x2] = (' + values[0] + ';' + values[1] + ']'
+      text: 'P(x1 < X <= x2) = ' + P.toFixed(2) + '%'
     });
     myChartProba.xAxis[0].redraw(false);
   });
@@ -290,7 +322,7 @@ $$
 | $$\mu_1 = $$ <output id="mean1value"></output> <input class="slider" style="background: #70D6FF;" type="range" id="mean1"  min="2" max="8" step="0.01" value="4"   oninput="updateGauss1()"> | $$\mu_2 = $$ <output id="mean2value"></output> <input class="slider" style="background: #F4E773;" type="range" id="mean2"  min="2" max="8" step="0.01" value="6"   oninput="updateGauss2()"> | $$ \mu = $$ <b><output id="meanRvalue"></output></b> |
 | $$\sigma_1 = $$ <output id="sigma1value"></output> <input class="slider" style="background: #70D6FF;" type="range" id="sigma1" min="0.2" max="2" step="0.01" value="0.25" oninput="updateGauss1()"> | $$\sigma_2 = $$ <output id="sigma2value"></output> <input class="slider" style="background: #F4E773;" type="range" id="sigma2" min="0.2" max="2" step="0.01" value="0.4" oninput="updateGauss2()"> | $$ \sigma = $$ <b><output id="sigmaRvalue"></output></b>|
 
-<div id="gaussCombination" style="width:100%; height:400px;"></div>
+<div id="gaussCombination" class="graph_responsive"></div>
 <script>
 {
   var mean1,mean2,sigma1,sigma2,mean,sigma;
