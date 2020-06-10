@@ -11,7 +11,7 @@ header:
     url:        /portfolio.html
     key:        portfolio
   - title:      Publications
-    url:        /publications.html
+    url:        https://scholar.google.com/citations?user=opCoWCAAAAAJ&hl=en
     key:        publications
   - title:      Archive
     url:        /archive.html
