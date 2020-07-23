@@ -1,9 +1,6 @@
 header:
   - title:      Home
     url:        /
-  - title:      Blog
-    url:        /blog/
-    key:        blog
   - title:      Projects
     url:        /projects.html
     key:        projects
@@ -13,5 +10,3 @@ header:
   - title:      Publications
     url:        https://scholar.google.com/citations?user=opCoWCAAAAAJ&hl=en
     key:        publications
-  - title:      Archive
-    url:        /archive.html
