@@ -11,14 +11,14 @@ article_header:
     src: /assets/images/home/cover3.jpg
 ---
 
-All the curious and challenging projects I have worked on in the past 5 years.
+Some of the projects I have worked on in the past 6 years.
 
 ### Table of Contents
 
-1. Post-doc: SLAM and medical robotics
-2. PhD thesis: 3D recontsruction and robot calibration
-3. Master thesis: Visual servoing for microassembly
-4. Teaching experience
+* Post-doc: SLAM and medical robotics
+* PhD thesis: 3D recontsruction and robot calibration
+* Master thesis: Visual servoing for microassembly
+* Teaching experience
 
 ## Post-doc - SLAM and medical robotics
 *November 2017 - October 2018*
@@ -50,12 +50,17 @@ The final output of the presented techniques is a dense point cloud correspondin
 </div>
 
 
-All algorithms developed during my thesis were then included in a stand-alone software **Pollen3D**. It is written in C++ using OpenCV and Qt for GUI. The license belongs to the University of Franche-Comté.
+All algorithms developed during my thesis were then included in a stand-alone software **pollen3d**. It is written in C++ using ImGui for GUI. Here’s a quick snapshot of pollen3d:
 
-If you are interested in obtaining that software or in collaboration in general, please contact my PhD supervisor [Dr. Sounkalo Dembélé](https://www.femto-st.fr/en/femto-people/sounkalodembele). Here’s a quick snapshot of Pollen3D:
 
 <div style="text-align:center">
-<img src="/assets/images/portfolio/window_rectification.jpg" alt="3D reconstruction in SEM" class="img-responsive center-image" style="width: 90%">
+<img src="/assets/images/portfolio/ostracode.png" alt="3D reconstruction in SEM" class="img-responsive center-image" style="width: 100%">
+</div>
+
+3D reconstruction of a pollen grain:
+
+<div style="text-align:center">
+<img src="/assets/images/portfolio/brassica4.png" alt="3D reconstruction in SEM" class="img-responsive center-image" style="width: 100%">
 </div>
 
 ## Robot calibration in Scanning Electron Microscope

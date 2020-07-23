@@ -14,17 +14,17 @@ article_header:
 
 Hi and welcome to my website!
 
-My core skills and experience are at the confluence of robotics and computer vision. Specifically, I have developed algorithms for automatic navigation of a small continuum robot inside a nasal cavity, using incoming images; developed new 3D reconstruction techniques to obtain 3D models for microsamples using a Scanning Electron Microscope (SEM) and worked on a series of other tasks related to visual tracking and visual servoing for different complex systems and microassembly tools.
+My core skills and experience are at the confluence of robotics and computer vision. Specifically, I have developed algorithms for automatic navigation of a small continuum robot inside a nasal cavity, using incoming images; developed new 3D reconstruction techniques to obtain 3D models for microsamples using a Scanning Electron Microscope (SEM) and worked on a series of other tasks related to visual tracking and visual servoing for different complex systems and microassembly tools. In 2017, I graduated from the [University of Franche-Comté](https://avkudr.github.io/www.univ-fcomte.fr/) with a PhD degree. 
 
-In 2017, I graduated from the [University of Franche-Comté](https://avkudr.github.io/www.univ-fcomte.fr/) with a PhD degree. Currently, I am a postdoctoral researcher at [FEMTO-ST / AS2M](https://www.femto-st.fr/en/Research-departments/AS2M/Presentation) in Besançon, France. You can review my complete [CV-resume here](https://avkudr.github.io/assets/CV_Andrey_Kudryavtsev_web.pdf).
+Today, I am a computer vision engineer at [Modulo Pi](https://www.modulo-pi.com/). For the last two years I’ve been working on various exciting projects: multicamera calibration, autocalibration of multiple projectors, pose tracking, 3D reconstruction, and augmented reality.
 
-To learn more about my hands-on work, check out [my portfolio](/portfolio) and some of [my open-source projects](/projects).
+To learn more about my hands-on work, check out [my portfolio](/portfolio) and some of [my open-source projects](/projects). You can also review my complete [CV-resume here](https://avkudr.github.io/assets/CV_avk_web.pdf).
 
 ### Key Skills
 
-* **Programming**: C++ (OpenCV, ViSP, Qt), MATLAB, JavaScript, Java
-* **Computer vision**: 3D reconstruction, visual tracking, visual servoing, pose estimation, SLAM
+* **Programming**: C++ (opencv, openmvg, ceres, qt, visp), MATLAB, JavaScript, Java
+* **Computer vision**: 3D reconstruction, camera selfcalibration, visual tracking, visual servoing, pose estimation, SLAM
 * **Robotics**: robot calibration, automatic navigation, precise control/positionning
 
-Questions are Always Welcome!
+Questions are always welcome!
 If you’d like to get in touch, feel free to email me at *andrey.kudryavtsev.24 [at] gmail.com*
