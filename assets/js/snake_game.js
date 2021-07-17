@@ -1,23 +1,35 @@
-// function draw() {
-//   var canvas = document.getElementById('snake_game');
-//   if (canvas.getContext) {
-//     var ctx = canvas.getContext('2d');
-
-//     ctx.fillStyle = 'rgb(200, 0, 0)';
-//     ctx.fillRect(10, 10, 50, 50);
-
-//     ctx.fillStyle = 'rgba(0, 0, 200, 0.5)';
-//     ctx.fillRect(30, 30, 50, 50);
-//   }
-// }
+// Warning! Bad code below!
 
 var xsize = 40;
 var ysize = 40;
-var squareSizePx = 10;
+var squareSizePx = 12;
 
 var speedIntervalMs = 100;
+var directionChangeAllowed = true;
 
-var direction = 0;
+function speedReset() {
+  speedIntervalMs = 100;
+  clearInterval(myGameArea.interval);
+  myGameArea.interval = setInterval(updateGameArea, speedIntervalMs);
+}
+
+function speedSlower() {
+  speedIntervalMs *= 0.9;
+  clearInterval(myGameArea.interval);
+  myGameArea.interval = setInterval(updateGameArea, speedIntervalMs);
+}
+
+function speedFaster() {
+  speedIntervalMs *= 1.1;
+  clearInterval(myGameArea.interval);
+  myGameArea.interval = setInterval(updateGameArea, speedIntervalMs);
+}
+
+const Directions = { "left": 0, "right": 1, "up": 2, "down": 3 }
+Object.freeze(Directions)
+
+var direction = Directions.left;
+var newDirection = direction;
 
 var snake, food;
 function startGame() {
@@ -47,26 +59,25 @@ function SnakeElement(x, y) {
   this.draw = function () {
     ctx = myGameArea.context;
     ctx.fillStyle = "green";
-    ctx.fillRect(this.x * squareSizePx, this.y * squareSizePx, squareSizePx, squareSizePx);
+    ctx.fillRect(this.x * squareSizePx - 1, this.y * squareSizePx - 1, squareSizePx - 2, squareSizePx - 2);
   }
 }
 
-function nextBlockXY(direction, x, y) 
-{
+function nextBlockXY(direction, x, y) {
   switch (direction) {
-    case 0: // left
+    case Directions.left:
       x = (x - 1 + xsize) % xsize;
       y = y;
       break;
-    case 1: // right
+    case Directions.right:
       x = (x + 1) % xsize;
       y = y;
       break;
-    case 2: // up
+    case Directions.up:
       x = x;
       y = (y - 1 + ysize) % ysize;
       break;
-    case 3: // down
+    case Directions.down:
       x = x;
       y = (y + 1) % ysize;
       break;
@@ -74,14 +85,14 @@ function nextBlockXY(direction, x, y)
       alert('Default case');
   }
 
-  return [x,y];
+  return [x, y];
 }
 
 function Snake() {
   this.elements = [];
-  this.elements.push(new SnakeElement(5, 0));
-  this.elements.push(new SnakeElement(5, 0));
-  this.elements.push(new SnakeElement(5, 0));
+  this.elements.push(new SnakeElement(5, 20));
+  this.elements.push(new SnakeElement(5, 20));
+  this.elements.push(new SnakeElement(5, 20));
 
   this.draw = function () {
     for (const x of this.elements) { x.draw(); }
@@ -90,15 +101,14 @@ function Snake() {
     first = this.elements[0];
     last = this.elements[this.elements.length - 1];
 
-    var newBlock = nextBlockXY(direction,last.x,last.y)
-    var newBlk = new SnakeElement(newBlock[0],newBlock[1]);
+    var newBlock = nextBlockXY(direction, last.x, last.y)
+    var newBlk = new SnakeElement(newBlock[0], newBlock[1]);
 
-    if (newBlk.x === food.x && newBlk.y === food.y) 
-    {
-      do{
+    if (newBlk.x === food.x && newBlk.y === food.y) {
+      do {
         food = new Food();
-      }while(snake.intersects(food.x,food.y))
-    } 
+      } while (snake.intersects(food.x, food.y))
+    }
     else {
       this.elements.shift();
     }
@@ -116,8 +126,8 @@ function Snake() {
     return false;
   }
 
-  this.intersects = function (x,y) {
-    last = new SnakeElement(x,y);
+  this.intersects = function (x, y) {
+    last = new SnakeElement(x, y);
     for (let i = 0; i < this.elements.length; i++) {
       var tmp = this.elements[i];
       if (tmp.x === last.x && tmp.y === last.y) {
@@ -135,32 +145,52 @@ function Food() {
   this.draw = function () {
     ctx = myGameArea.context;
     ctx.fillStyle = "red";
-    ctx.fillRect(this.x * squareSizePx, this.y * squareSizePx, squareSizePx, squareSizePx);
+    ctx.fillRect(this.x * squareSizePx - 1, this.y * squareSizePx - 1, squareSizePx - 2, squareSizePx - 2);
   }
-}
-
-function updateGameArea() {
-  myGameArea.clear();
-  snake.move();
-  if (snake.crossesItself()) 
-  {
-    startGame();
-    return;
-  }
-    
-  snake.draw();
-  food.draw();
 }
 
 window.onkeydown = function (e) {
   var code = e.keyCode ? e.keyCode : e.which;
-  
-  if (code === 72) // h
-    direction = 0;
-  else if (code === 74) // j
-    direction = 3;
-  else if (code === 75) // k
-    direction = 2;
-  else if (code === 76) // l
-    direction = 1;
+
+  if (code === 72 && direction !== Directions.right) {// h
+    newDirection = Directions.left;
+  }
+  else if (code === 74 && direction !== Directions.up) {// j
+    newDirection = Directions.down;
+  }
+  else if (code === 75 && direction !== Directions.down) {// k
+    newDirection = Directions.up;
+  }
+  else if (code === 76 && direction !== Directions.left) {// l
+    newDirection = Directions.right;
+  }
+  else if (e.key === "+") {
+    speedSlower();
+  }
+  else if (e.key === "0") {
+    speedReset();
+  }
+  else if (e.key === "-") {
+    speedFaster();
+  }
 };
+
+function updateGameArea() {
+  myGameArea.clear();
+
+  direction = newDirection;
+  snake.move();
+  if (snake.crossesItself()) {
+    startGame();
+    return;
+  }
+
+  snake.draw();
+  food.draw();
+  myGameArea.context.fillStyle = "black";
+  myGameArea.context.font = "18px Arial";
+  myGameArea.context.fillText("Score: " + (snake.elements.length - 3), 15, 25);
+
+  // making sure that the direction is not changed more than one time per frame
+  
+}
