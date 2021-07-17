@@ -1,6 +1,9 @@
 header:
   - title:      Home
     url:        /
+  - title:      Blog
+    url:        /blog/
+    key:        blog
   - title:      Projects
     url:        /projects.html
     key:        projects
