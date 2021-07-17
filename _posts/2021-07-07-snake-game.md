@@ -1,7 +1,7 @@
 ---
 layout: article
-title: Snake game for Vim learners
-tags: Vim JavaScript
+title: Snake game for vim learners
+tags: vim
 show_edit_on_github: false
 mathjax: true
 mathjax_autoNumber: true
@@ -16,6 +16,8 @@ Navigation: `[h]` left, `[j]` down, `[k]` up, `[l]` right
 
 Speed: `[-]` slower, `[0]` reset speed, `[+]` faster
 
+<!--more-->
+
 <a class="button button--primary button--rounded button--sm" onclick="speedSlower()">slower</a>
 <a class="button button--primary button--rounded button--sm" onclick="speedReset()">slower</a>
 <a class="button button--primary button--rounded button--sm" onclick="speedFaster()">faster</a>
@@ -23,7 +25,7 @@ Speed: `[-]` slower, `[0]` reset speed, `[+]` faster
 <canvas id="snake_game" width="300" height="300">
 </canvas>
 
-A slightly more complicated version can be found on [vimsnake.com](https://vimsnake.com/). There, the snake can change directions and eat food only in insert mode.
+A slightly more advanced version can be found on [vimsnake.com](https://vimsnake.com/). There, the snake can change directions and eat food only in insert mode.
 
 <style>
 canvas {
