@@ -1,3 +1,10 @@
 <!-- start custom article top snippet -->
 
+{%- assign _highcharts = page.highcharts | default: layout.highcharts -%}
+{%- if _highcharts -%}
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+{%- else -%}
+  <script>console.log("no highcharts")</script>
+{%- endif -%}
+
 <!-- end custom article top snippet -->

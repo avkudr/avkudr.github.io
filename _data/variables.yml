@@ -13,7 +13,7 @@ default:
   chart: false
   toc:
     selectors: 'h1,h2,h3'
-  sources: bootcdn
+  sources: europe
 
   page:
     mode: normal
@@ -51,6 +51,7 @@ sources:
     valine: 'https://unpkg.com/valine/dist/Valine.min.js' # bootcdn not available
     mathjax: 'https://cdn.bootcss.com/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML'
     mermaid: 'https://cdn.bootcss.com/mermaid/8.0.0-rc.8/mermaid.min.js'
+
   unpkg:
     font_awesome: 'https://use.fontawesome.com/releases/v5.0.13/css/all.css'
     jquery: 'https://unpkg.com/jquery@3.3.1/dist/jquery.min.js'
@@ -62,3 +63,15 @@ sources:
     valine: 'https//unpkg.com/valine/dist/Valine.min.js'
     mathjax: 'https://unpkg.com/mathjax@2.7.4/unpacked/MathJax.js?config=TeX-MML-AM_CHTML'
     mermaid: 'https://unpkg.com/mermaid@8.0.0-rc.8/dist/mermaid.min.js'
+
+  europe:
+    font_awesome: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css'
+    jquery: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'
+    leancloud_js_sdk: '//cdn.jsdelivr.net/npm/leancloud-storage@3.13.2/dist/av-min.js'
+    chart: 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js'
+    gitalk:
+      js: 'https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.5.0/gitalk.min.js'
+      css: 'https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.5.0/gitalk.min.css'
+    valine: 'https://cdnjs.cloudflare.com/ajax/libs/valine/1.3.10/Valine.min.js' # bootcdn not available
+    mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-MML-AM_CHTML'
+    mermaid: 'https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.3.1/mermaid.min.js'

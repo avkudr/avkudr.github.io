@@ -86,7 +86,44 @@ input[type="btnBibOrange"]{
   }
 }
 
-input[type="btnBibGreen"]{
+input[type="btnBlue"],
+input[type="btnGreen"],
+input[type="btnOrange"]{
+  padding:0;
+  margin-top:5px;
+  line-height: 1;
+  letter-spacing: 0.0em;
+  text-transform: lowercase;
+  display: inline;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: bold;
+  max-width: 130px;
+  height: 35px;
+  padding-top: 0;
+  padding-bottom: 0;
+  color: #f6f8fa;
+  text-align: center;
+  border: 0;
+  border-radius: 3px;
+  transition: all 0.45s cubic-bezier(0.25, 1, 0.33, 1);
+  outline: 0;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  &::after {
+    display: none;
+  }
+}
+
+input[type="btnBibGreen"],
+input[type="btnGreen"]{
   background-color: #009999;
   &:hover, :focus, :active {
     background-color: teal;
@@ -94,16 +131,20 @@ input[type="btnBibGreen"]{
 } 
 
 #bibtexbutton,
-input[type="btnBibBlue"]{
+input[type="btnBibBlue"],
+input[type="btnBlue"]{
   background-color: #5bc0de;
   &:hover, :focus, :active {
     background-color: #46b8da;
   }
 } 
 
-input[type="btnBibOrange"]{
+input[type="btnBibOrange"],
+input[type="btnOrange"]{
   background-color: #f0ad4e;
   &:hover, :focus, :active {
     background-color: #eea236;
   }
 } 
+
+
