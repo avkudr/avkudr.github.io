@@ -16,8 +16,6 @@ Hi and welcome to my website!
 
 My core skills and experience are at the confluence of robotics and computer vision. Specifically, I have developed algorithms for automatic navigation of a small continuum robot inside a nasal cavity, using incoming images; developed new 3D reconstruction techniques to obtain 3D models for microsamples using a Scanning Electron Microscope (SEM) and worked on a series of other tasks related to visual tracking and visual servoing for different complex systems and microassembly tools. In 2017, I graduated from the [University of Franche-Comté](https://avkudr.github.io/www.univ-fcomte.fr/) with a PhD degree. 
 
-Today, I am a computer vision engineer at [Modulo Pi](https://www.modulo-pi.com/). For the last two years I’ve been working on various exciting projects: multicamera calibration, autocalibration of multiple projectors, pose tracking, 3D reconstruction, and augmented reality.
-
 To learn more about my hands-on work, check out [my portfolio](/portfolio) and some of [my open-source projects](/projects). You can also review my complete [CV-resume here](https://avkudr.github.io/assets/CV_avk_web.pdf).
 
 ### Key Skills
