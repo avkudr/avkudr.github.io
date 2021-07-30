@@ -18,8 +18,8 @@ Speed: `[-]` slower, `[0]` reset speed, `[+]` faster
 
 <!--more-->
 
+<a class="button button--primary button--rounded button--sm" onclick="speedReset()">reset</a>
 <a class="button button--primary button--rounded button--sm" onclick="speedSlower()">slower</a>
-<a class="button button--primary button--rounded button--sm" onclick="speedReset()">slower</a>
 <a class="button button--primary button--rounded button--sm" onclick="speedFaster()">faster</a>
 
 <canvas id="snake_game" width="300" height="300">
