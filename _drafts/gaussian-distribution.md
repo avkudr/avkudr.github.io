@@ -33,56 +33,64 @@ To confirm this fact, let's use a coin flip simulation. The experiment consists 
 
 <input type="btnBlue" onclick="simulateGauss(50)"   value="Run 50 times"   readonly="readonly"/>
 <input type="btnBlue" onclick="simulateGauss(5000)" value="Run 5000 times" readonly="readonly"/>
-<div><canvas id="LineWithLine" style="width: 100%; height: 400px"></canvas></div>
+<div id="gaussSimulation" style="width:100%; height:400px;"></div>
 <script>
 {
   var nbTries = {{ page.private_nbTries_ }};
-  var data =  new Array(nbTries+1).fill(0);
+  var data = new Array(nbTries+1).fill(0);
   var labels = new Array(nbTries+1).fill(0);
   for (var i = 0; i < nbTries+1; i++) labels[i] = i;
 
-  var options = {
-    tooltips: {
-      callbacks: {
-        title: function (tooltipItem) {
-          return "Number of heads: " + Number(tooltipItem[0].xLabel);
-        },
-        label: function (tooltipItem) {
-          return "Number of outcomes: " + Number(tooltipItem.yLabel);
-        }
-      }
+  var headerPostFix = "/" + nbTries + " flipping heads";
+  var myChartSimu = Highcharts.chart('gaussSimulation', {
+    chart: {
+      type: 'column'
     },
     title: {
-      display: true,
-      text: 'Coin toss simulation',
-      position: 'top'
+      text:''
     },
-    legend: {
-      position: 'bottom'
+    credits: {
+      enabled: true
     },
-    onHover: function(evt) {
-      //console.log(evt);
-    }
-  };
-  var myBarChart = new Chart(document.getElementById("LineWithLine"), {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: [{
-        type: 'line',
-        label: "Probability density function",
-        backgroundColor: '#1d7892',
-        borderColor: '#1d7892',
-        fill: false,
-        borderDash: [2,2],
-        data: data
-      },{
-        label: "Number of heads",
-        backgroundColor: '#5bc0de',
-        data: data
-      }]
+    xAxis: {
+      categories: labels,
+      gridLineWidth: 1,
     },
-    options: options
+    yAxis: {
+      min: 0,
+      gridLineWidth: 1,
+      title: {
+        text: 'Number of experiments'
+      }
+    },
+    tooltip: {
+      headerFormat: '<span style="font-size:12px">{point.key}' + headerPostFix + '</span><table>',
+      pointFormat: '<tr><td style="color:{series.color};padding:0">Number of outcomes: </td>' +
+        '<td style="padding:0"><b>{point.y:.0f}</b></td></tr>',
+      footerFormat: '</table>',
+      shared: true,
+      useHTML: true
+    },
+    plotOptions: {
+      column: {
+        pointPadding: 0.01,
+        borderWidth: 1
+      }
+    },
+    series: [{
+      name: 'Number of heads',
+      data: data,
+      color: '#5bc0de'
+    },{
+      name: 'Probability density function',
+      type: 'spline',
+      dashStyle: 'DashDot',
+      color: '#1d7892',
+      data: data,
+      tooltip: {
+        pointFormat: ""
+      }
+    }]
   });
 
   function runSimulation(nTimes) {
@@ -100,17 +108,17 @@ To confirm this fact, let's use a coin flip simulation. The experiment consists 
       var res = runSimulation(nbTries);
       data[res]++;
     }
-    var yMax = (nbRuns == 50) ? 14 : 1200;
-    for (var i = 0; i < nbTries+1; i++) {
-      myBarChart.data.datasets[0].data[i] = data[i];
-      myBarChart.data.datasets[1].data[i] = data[i];
-    }
-    myBarChart.options.scales.yAxes[0].ticks.max = yMax;
-    myBarChart.update();
+    var yMax = (nbRuns == 50) ? 15 : 1250;
+    myChartSimu.series[0].setData(data);
+    myChartSimu.yAxis[0].update({
+      max: yMax
+    })
+    myChartSimu.series[1].setData(data);
+    myChartSimu.redraw();
   }
 
   simulateGauss(5000)
-}
+  }
 </script>
 
 ### Properties of Gaussian distribution
