@@ -1,7 +1,7 @@
 ---
 layout: article
 title: 'Measurement uncertainty'
-tags: Kalman Guassian
+tags: Kalman Gaussian
 show_edit_on_github: false
 mathjax: true
 mathjax_autoNumber: false
@@ -9,7 +9,6 @@ show_tags: true
 highcharts: true
 show_subscribe: true
 modify_date: 2019-12-08
-chart: true
 private_nbTries_: 20
 ---
 
@@ -26,58 +25,6 @@ $$ P(X = 16) = {1 \over {b - a}} = {1 \over {5 - (-5)}} = 0.1 = 10\%$$
 
 However, uniform is not the best way to represent measurement uncertainty. In fact, if the voltmeter shows you the value of 12V you expect it to be close to this value. In other words it is common to think that the value of *11.99*V is much more likely than the value of 10V even if you know that the measurement uncertainty of the device is 2V. While in this case the uniform distribution doesn't work anymore, we can model this situation with **Gaussian** (aka normal) **distribution**.
 
-<input type="btnBlue" onclick="simulateGauss(50)"   value="Run 50 times"   readonly="readonly"/>
-<input type="btnBlue" onclick="simulateGauss(5000)" value="Run 5000 times" readonly="readonly"/>
-<div><canvas id="LineWithLine" style="width: 100%; height: 400px"></canvas></div>
-<script>
-{
-  var nbTries = {{ page.private_nbTries_ }};
-  var data =  [0, 0, 0, 7, 22, 71, 201, 335, 588, 808, 908, 830, 585, 370, 168, 75, 25, 3, 4, 0, 0];
-  var labels = new Array(nbTries+1).fill(0);
-  for (var i = 0; i < nbTries+1; i++) labels[i] = i;
-
-  var myBarChart = new Chart(document.getElementById("LineWithLine"), {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: [{
-          label: "Cow",
-          color: '#5bc0de',
-          data: data
-      }]
-    }
-  });
-
-  function runSimulation(nTimes) {
-    var out = 0;
-    for (var i = 0; i < nbTries; i++) {
-      var heads = Math.random() >= 0.5;
-      if (heads) out++;
-    }
-    return out;
-  }
-
-  function simulateGauss(nbRuns) {
-    data = new Array(nbTries+1).fill(0);
-    for (var i = 0; i < nbRuns; i++) {
-      var res = runSimulation(nbTries);
-      data[res]++;
-    }
-    var yMax = (nbRuns == 50) ? 15 : 1250;
-    console.log('DFDIFUHDUFIDSUFHISDU ');
-    //myBarChart.options.scales.yAxes[0] = {
-    //    min: 0,
-    //    max: yMax
-    //};
-    myBarChart.data.datasets[0].data.pop();
-    myBarChart.data.datasets[0].data.push(data);
-    myBarChart.update();
-  }
-
-  simulateGauss(5000)
-}
-</script>
-
 ### Why Gaussian distribution?
 
 Why normal distribution and not any other non-uniform distribution? The main reason for that is the central limit theorem. It states that "when independent random variables are added, their properly normalized sum tends toward a normal distribution (informally a "bell curve") even if the original variables themselves are not normally distributed" [\[wiki\]](https://en.wikipedia.org/wiki/Central_limit_theorem).
@@ -86,64 +33,56 @@ To confirm this fact, let's use a coin flip simulation. The experiment consists 
 
 <input type="btnBlue" onclick="simulateGauss(50)"   value="Run 50 times"   readonly="readonly"/>
 <input type="btnBlue" onclick="simulateGauss(5000)" value="Run 5000 times" readonly="readonly"/>
-<div id="gaussSimulation" style="width:100%; height:400px;"></div>
+<div><canvas id="LineWithLine" style="width: 100%; height: 400px"></canvas></div>
 <script>
 {
   var nbTries = {{ page.private_nbTries_ }};
-  var data = new Array(nbTries+1).fill(0);
+  var data =  new Array(nbTries+1).fill(0);
   var labels = new Array(nbTries+1).fill(0);
   for (var i = 0; i < nbTries+1; i++) labels[i] = i;
 
-  var headerPostFix = "/" + nbTries + " flipping heads";
-  var myChartSimu = Highcharts.chart('gaussSimulation', {
-    chart: {
-      type: 'column'
+  var options = {
+    tooltips: {
+      callbacks: {
+        title: function (tooltipItem) {
+          return "Number of heads: " + Number(tooltipItem[0].xLabel);
+        },
+        label: function (tooltipItem) {
+          return "Number of outcomes: " + Number(tooltipItem.yLabel);
+        }
+      }
     },
     title: {
-      text:''
+      display: true,
+      text: 'Coin toss simulation',
+      position: 'top'
     },
-    credits: {
-      enabled: true
+    legend: {
+      position: 'bottom'
     },
-    xAxis: {
-      categories: labels,
-      gridLineWidth: 1,
+    onHover: function(evt) {
+      //console.log(evt);
+    }
+  };
+  var myBarChart = new Chart(document.getElementById("LineWithLine"), {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        type: 'line',
+        label: "Probability density function",
+        backgroundColor: '#1d7892',
+        borderColor: '#1d7892',
+        fill: false,
+        borderDash: [2,2],
+        data: data
+      },{
+        label: "Number of heads",
+        backgroundColor: '#5bc0de',
+        data: data
+      }]
     },
-    yAxis: {
-      min: 0,
-      gridLineWidth: 1,
-      title: {
-        text: 'Number of experiments'
-      }
-    },
-    tooltip: {
-      headerFormat: '<span style="font-size:12px">{point.key}' + headerPostFix + '</span><table>',
-      pointFormat: '<tr><td style="color:{series.color};padding:0">Number of outcomes: </td>' +
-        '<td style="padding:0"><b>{point.y:.0f}</b></td></tr>',
-      footerFormat: '</table>',
-      shared: true,
-      useHTML: true
-    },
-    plotOptions: {
-      column: {
-        pointPadding: 0.01,
-        borderWidth: 1
-      }
-    },
-    series: [{
-      name: 'Number of heads',
-      data: data,
-      color: '#5bc0de'
-    },{
-      name: 'Probability density function',
-      type: 'spline',
-      dashStyle: 'DashDot',
-      color: '#1d7892',
-      data: data,
-      tooltip: {
-        pointFormat: ""
-      }
-    }]
+    options: options
   });
 
   function runSimulation(nTimes) {
@@ -161,17 +100,17 @@ To confirm this fact, let's use a coin flip simulation. The experiment consists 
       var res = runSimulation(nbTries);
       data[res]++;
     }
-    var yMax = (nbRuns == 50) ? 15 : 1250;
-    myChartSimu.series[0].setData(data);
-    myChartSimu.yAxis[0].update({
-      max: yMax
-    })
-    myChartSimu.series[1].setData(data);
-    myChartSimu.redraw();
+    var yMax = (nbRuns == 50) ? 14 : 1200;
+    for (var i = 0; i < nbTries+1; i++) {
+      myBarChart.data.datasets[0].data[i] = data[i];
+      myBarChart.data.datasets[1].data[i] = data[i];
+    }
+    myBarChart.options.scales.yAxes[0].ticks.max = yMax;
+    myBarChart.update();
   }
 
   simulateGauss(5000)
-  }
+}
 </script>
 
 ### Properties of Gaussian distribution
