@@ -1,3 +1,55 @@
+blockquote.keypoints {
+  padding-bottom: map-get($spacers, 3);
+  padding-top: map-get($spacers, 3);
+  padding-left: map-get($spacers, 4);
+  padding-right: map-get($spacers, 4);
+  background-color: rgba($green, .1);
+  border: 1px solid $green;
+  border-radius: map-get($base, border-radius-lg);
+  font-size: map-get($base, font-size);
+  color: $text-color;
+}
+
+.graph_responsive{
+  width:85%; 
+  height:400px;
+  margin: 0 auto;
+  @media (max-width: 480px){
+    width:100%; 
+  }
+}
+
+.slider {
+  -webkit-appearance: none;
+  height: 15px;
+  border-radius: 5px;  
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%; 
+  background: rgb(199, 199, 199);
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: rgb(199, 199, 199);
+  cursor: pointer;
+}
+
+
+
 .btn,
 input[type="submit"],
 input[type="reset"],
@@ -145,6 +197,5 @@ input[type="btnOrange"]{
   &:hover, :focus, :active {
     background-color: #eea236;
   }
-} 
-
+}
 
