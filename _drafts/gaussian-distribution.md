@@ -7,6 +7,7 @@ mathjax: true
 mathjax_autoNumber: false
 show_tags: true
 highcharts: true
+nouislider: true
 show_subscribe: true
 modify_date: 2019-12-08
 private_nbTries_: 20
@@ -146,7 +147,122 @@ below the curve (integral) in some range $$[x_1,x_2]$$, so the probability of on
 * the probability of a variable to be in the range of $$[\mu-\sigma,\mu+\sigma]$$ is 68.27%
 * the integral of the gaussian distribution in the range $$(-\infty,\infty)$$ is equal to 1
 
+<div id="double-slider"></div>
+<div id="gaussProba" style="width:100%; height:400px;"></div>
+<script>
+{
+  var y = [0.001338, 0.008727, 0.044318, 0.175283, 0.539910, 1.295176, 2.419707, 3.520653, 3.989423, 3.520653, 2.419707, 1.295176, 0.539910, 0.175283, 0.044318, 0.008727, 0.001338];
+  var x = [-0.400000, -0.350000, -0.300000, -0.250000, -0.200000, -0.150000, -0.100000, -0.050000, 0.000000, 0.050000, 0.100000, 0.150000, 0.200000, 0.250000, 0.300000, 0.350000, 0.400000];
 
+  var dataXY = [];
+  for (var i = 0; i < x.length; i++) dataXY.push({
+    x: x[i],
+    y: y[i]
+  })
+  var headerPostFix = "/" + nbTries + " flipping heads";
+  var myChartProba = Highcharts.chart('gaussProba', {
+    chart: {
+      type: 'areaspline',
+      animation: false
+    },
+    title: {
+      text: ''
+    },
+    credits: {
+      enabled: true
+    },
+    xAxis: {
+      gridLineWidth: 1,
+      min: -0.4,
+      max: 0.4,
+      minorTickInterval: 0.05,
+      plotBands: [{
+        color: 'rgb(200,0,0,0.1)', // Color value
+        from: -0.2, // Start of the plot band
+        to: 0.2, // End of the plot band
+        zIndex: 1,
+        label: {
+          text: 'Plot band',
+          x: -10,
+          style: {
+            fontSize: '0.9rem',
+            fontWeight: 'bold'
+          }
+        }
+      }],
+    },
+    yAxis: {
+      min: 0,
+      minorTickInterval: 0.5,
+      gridLineWidth: 1,
+      title: {
+        text: 'f(x)'
+      }
+    },
+    tooltip: {
+      headerFormat: '<span style="font-size:12px">{point.key}' + headerPostFix + '</span><table>',
+      pointFormat: '<tr><td style="color:{series.color};padding:0">Number of outcomes: </td>' +
+        '<td style="padding:0"><b>{point.y:.0f}</b></td></tr>',
+      footerFormat: '</table>',
+      shared: true,
+      useHTML: true
+    },
+    plotOptions: {
+      column: {
+        pointPadding: 0.01,
+        borderWidth: 1
+      },
+      series: {
+        animation: {
+          duration: 0
+        }
+      }
+    },
+    drilldown: {
+      animation: {
+        duration: 0
+      }
+    },
+    series: [{
+      name: 'Random variable X',
+      color: 'rgb(63, 184, 175,0.6)',
+      data: dataXY,
+      zIndex: 2
+    }]
+  });
+
+  var slider = document.getElementById('double-slider');
+
+  noUiSlider.create(slider, {
+    start: [-0.2, 0.2],
+    connect: true,
+    step: 0.01,
+    margin: 0.01,
+    range: {
+      'min': -0.4,
+      'max': 0.4
+    }
+  });
+
+  slider.noUiSlider.on('update', function (values, handle) {
+    myChartProba.xAxis[0].plotLinesAndBands[0].options.from = parseFloat(values[0]);
+    myChartProba.xAxis[0].plotLinesAndBands[0].options.to = parseFloat(values[1]);
+    myChartProba.xAxis[0].plotLinesAndBands[0].label.attr({
+      text: '(x1;x2] = (' + values[0] + ';' + values[1] + ']'
+    });
+    myChartProba.xAxis[0].redraw(false);
+  });
+
+  function resize() {
+    document.getElementById("double-slider").style.marginLeft = myChartProba.plotBox.x + 'px';
+    document.getElementById("double-slider").style.marginBottom = '10px';
+    document.getElementById("double-slider").style.width = myChartProba.plotBox.width + 'px';
+  }
+
+  resize();
+  window.onresize = resize;
+}
+</script>
 
 
 ### Multiple measurements
