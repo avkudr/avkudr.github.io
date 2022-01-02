@@ -11,6 +11,7 @@ nouislider: true
 show_subscribe: true
 modify_date: 2022-01-02
 private_nbTries_: 20
+comments: true
 ---
 
 Let's say we want to know the altitude of the drone we are flying. On one hand, our drone has a pressure sensor that allows us to measure the altitude. On the other hand, we know the altitude of the drone a second ago and the thrust produced by propellers, so the current altitude can be calculated from it. The question is how to combine these data to get one more accurate result, and often the answer is to use a Kalman filter. Kalman filter can provide an optimal estimate given a model and a measurement in the form of a normal (aka Gaussian) distribution. In this article, I will try to explain why normal distribution works and how it gives Kalman filter its superpower.   

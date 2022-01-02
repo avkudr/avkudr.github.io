@@ -8,6 +8,7 @@ mathjax_autoNumber: true
 mermaid: true
 show_tags: true
 modify_date: 2021-07-17
+comments: true
 ---
 
 Minimalisic snake game for Vim learners: instead of using arrows you have to use h,j,k,l for navigating. If you use vimium plugin, make sure that it is disabled on this page.

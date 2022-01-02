@@ -7,6 +7,7 @@ type: article
   target = site.data.variables.default.page.sharing
   source0=layout.sharing source1=page.sharing -%}
 {%- assign _sharing = __return -%}
+{%- assign _comments = page.comments | default: layout.comments -%}
 
 <div class="layout--article">
   {%- include article/top/custom.html -%}
@@ -21,6 +22,17 @@ type: article
     {%- include article-footer.html -%}
     {%- include article-section-navigator.html -%}
   </div>
+
+  {%- if _comments -%}
+  <script src="https://utteranc.es/client.js"
+    repo="avkudr/avkudr.github.io"
+    issue-term="pathname"
+    label="comment"
+    theme="github-light"
+    crossorigin="anonymous"
+    async>
+  </script>
+  {%- endif -%}
 
 </div>
 
