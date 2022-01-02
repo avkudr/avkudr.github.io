@@ -1,7 +1,7 @@
 ---
 layout: article
-title: 'Measurement uncertainty'
-tags: Kalman Gaussian
+title: 'Background to Kalman filter: normal distribution'
+tags: Kalman normal-distribution
 show_edit_on_github: false
 mathjax: true
 mathjax_autoNumber: false
@@ -9,32 +9,36 @@ show_tags: true
 highcharts: true
 nouislider: true
 show_subscribe: true
-modify_date: 2019-12-08
+modify_date: 2022-01-02
 private_nbTries_: 20
 ---
 
-This is the first article in a small series (I hope) realted to the Kalman filter. The main goal is to provide some intuition on why we use normal distibution and how we combine *data (measurements)* from different sources (model and sensor, multiple sensors, etc.) <!--more-->
+Let's say we want to know the altitude of the drone we are flying. On one hand, our drone has a pressure sensor that allows us to measure the altitude. On the other hand, we know the altitude of the drone a second ago and the thrust produced by propellers, so the current altitude can be calculated from it. The question is how to combine these data to get one more accurate result, and often the answer is to use a Kalman filter. Kalman filter can provide an optimal estimate given a model and a measurement in the form of a normal (aka Gaussian) distribution. In this article, I will try to explain why normal distribution works and how it gives Kalman filter its superpower.   
 
-### Accept the imperfection
+![header image with a drone](/assets/blog/gaussian/article_klman_image.jpg)
 
-As you most certainly know, the world isn't perfect. Every time you measure something, you never get the true value because every measuring device has an uncertainty which actually defines its quality. 
-One of the most common (non-scientific) ways to define the measuring uncertainty is to use a plus-minus sign. You can quite often hear that the weight of the box you have to lift to the forth floor is *15* ± *5* kg. What does ± actually says about the true value of the box weight? It can be either *12*, *19*, *15* or *13.486*. All of this values are equally likely. In probability theory this case is described by a **uniform distribution**. 
+### Accepting the uncertainty
+
+As you most certainly know, the world isn't perfect. Every time you measure something, you never get the true value because every measuring device has an uncertainty that defines its quality. 
+One of the most common ways to define the measuring uncertainty is to use a plus-minus sign. We could say that the drone is flying at *15* ± *5* m above the ground. What does this say about the true value of the altitude? It can be either *12*, *19*, *15*, or *13.486*. All of these values are equally likely. In probability theory, this case is described by a **uniform distribution**. 
 
 <!-- It may also be referred to as rectangular distribution. In order to say that the variable $$X$$ takes its value from the uniform distribution with the range $$[a,b]$$ we will use the following notation: $$ X \sim U(a,b) $$ -->
 
-With the uniform distribution it is quite easy to calculate the probability that a random variable equals any particular value inside the uncertainty range (±*5* in our case). For example, what is the probability of the weight to be *16* kg:
+With the uniform distribution, it is quite easy to calculate the probability that a random variable equals any particular value inside the uncertainty range (±*5* in our case). For example, the probability of the true value of the altitude to be *16* m:
 
 $$ P(X = 16) = {1 \over {b - a}} = {1 \over {5 - (-5)}} = 0.1 = 10\%$$
 
 <!-- The probability that a normal random variable X equals any particular value is 0. -->
 
-Answer: 10%. By the way, for all the values outside of our uncertainty the range the probability equals zero. While it is easy to calculate the probability, uniform distribution is not the best way to represent measurement uncertainty. In fact, if the voltmeter shows you the value of 12V you expect it to be close to this value. In other words it is common to think that the value of *11.99*V is much more likely than the value of 10V even if you know that the measurement uncertainty of the device is 0.05V. While in this case the uniform distribution doesn't work anymore, we can model this situation with **Gaussian** (aka normal) **distribution**.
+At the same time, for all the values outside of our uncertainty range, the probability equals zero. 
 
-### Why Gaussian distribution?
+The drawback of the uniform distribution is that it can't represent measurement uncertainty. If the sensor gives the value of 12 m you expect it to be close to this value. In other words, it is common to think that the value of 11.99 m is much more likely than the value of 10 m even knowing that the measurement uncertainty of the device is 2 m. One way to model this situation is to switch to a **normal distribution**.
 
-Why normal distribution and not any other non-uniform distribution? The main reason for that is the central limit theorem. It states that "when independent random variables are added, their properly normalized sum tends toward a normal distribution (informally a "bell curve") even if the original variables themselves are not normally distributed" [\[wiki\]](https://en.wikipedia.org/wiki/Central_limit_theorem).
+### Why normal distribution?
 
-To confirm this fact, let's use a coin flip simulation. The experiment consists in following. We toss a coin {{ page.private_nbTries_ }} times and write down the number of heads which can go from 0 to {{ page.private_nbTries_ }}. Then we repeat the experiment 50 or 5000 times. When running the experiment for 50 times it is difficult to see any pattern. However, after 5000 tries we see that the graph starts to look like a bell curve witch can be closely approximated by Gaussian distribution. As you've already guessed, this is one of the reasons why we assume normal distribution in Kalman filter.
+Why not any other non-uniform distribution? The main reason for that is the central limit theorem. It states that "when independent random variables are added, their properly normalized sum tends toward a normal distribution (informally a "bell curve") even if the original variables themselves are not normally distributed" [\[wiki\]](https://en.wikipedia.org/wiki/Central_limit_theorem).
+
+To confirm this fact, let's use a coin flip simulation. The experiment consists in the following. We toss a coin {{ page.private_nbTries_ }} times and write down the number of heads which can go from 0 to {{ page.private_nbTries_ }}. Then we repeat the experiment 50 or 5000 times. When running the experiment 50 times it is difficult to see any pattern. However, after 5000 tries we see that the graph starts to look like a bell curve which can be closely approximated by Gaussian distribution. As you've already guessed, this is one of the reasons why we assume normal distribution in the Kalman filter.
 
 <input type="btnBlue" onclick="simulateGauss(50)"   value="Run 50 times"   readonly="readonly"/>
 <input type="btnBlue" onclick="simulateGauss(5000)" value="Run 5000 times" readonly="readonly"/>
@@ -126,15 +130,15 @@ To confirm this fact, let's use a coin flip simulation. The experiment consists 
   }
 </script>
 
-### Properties of Gaussian distribution
+### Properties of normal distribution
 
-Another nice fact is that we need only two variables to define Gaussian distribution: mean ($$\mu$$) and variance ($$\sigma^2$$), and has the following notation:
+Another nice fact about normal distribution is that we need only two variables to define it: mean $$\mu$$ and variance $$\sigma^2$$. The notation is the following:
 
 $$ X \sim \mathcal{N}(\mu,\,\sigma^{2}) $$
 
-which says that some random variable $$X$$ follows normal distribution with mean $$\mu$$ and variance $$\sigma^2$$.
+which says that some random variable $$X$$ follows a normal distribution with mean $$\mu$$ and variance $$\sigma^2$$.
 
-However, in order to extract the propability we have to use a probability density function (PDF). And in case of Gaussian, it has the following form:
+However, to extract the probability we have to use a probability density function (PDF). And in the case of Gaussian, it has the following form:
 
 $$
 \begin{equation} \label{gaussiandistrib} 
@@ -144,18 +148,16 @@ f(x) = \frac{1}{\sigma\sqrt{2 \pi}}e^{ - {1\over{2}} \left ( \frac{x-\mu}{\sigma
 \end{equation}
 $$
 
-One of the important properties of this function is the fact that the total area under the curve is equal to 1. In other words, we are 100% sure that the random variable $$X$$ will take the value from the range $$(-\infty,\infty)$$; something will happen, we guarantee. Could we do better than that? What is the probability of one exact value, let's say $$\mu$$? The answer is zero:
+One of the important properties of this function is that the total area under the curve is equal to 1. In other words, we are 100% sure that the random variable $$X$$ will take the value from the range $$(-\infty,\infty)$$; something will happen, we guarantee. Could we do better than that? What is the probability of one exact value? 
 
-$$ P(X = \mu) = ? $$
+To find the probability from the probability density function, we need to find the area under the curve in the given range. In the case of one particular value, the width of the range equals zero, so the probability is also zero. It means that we can only estimate the probability in a range: $$ P(x_1 < X \leq x_2) $$.
 
-In order to find the probabilty from probability density function, we need to find the area under the curve in the given range. In case of one particular value, the width of the range equals zero, so the probability is also zero. It means that we can only estimate the probability in a range: $$ P(x_1 < X \leq x_2) $$.
-
-Some interesting properties of normal distribution:
-* probability density function is symmetric around the mean
-* probability of a variable to be in the range of $$[\mu-3\sigma,\mu+3\sigma]$$ is 99.73%
-* probability of a variable to be in the range of $$[\mu-2\sigma,\mu+2\sigma]$$ is 95.45%
-* probability of a variable to be in the range of $$[\mu-\sigma,\mu+\sigma]$$ is 68.27%
-* probability of a variable to be in the range of $$(-\infty,\mu]$$ or $$(\mu,\infty)$$ is 50.00%
+Some interesting properties of the normal distribution:
+* the probability density function is symmetric around the mean
+* the probability of a variable to be in the range of $$[\mu-3\sigma,\mu+3\sigma]$$ is 99.73%
+* the probability of a variable to be in the range of $$[\mu-2\sigma,\mu+2\sigma]$$ is 95.45%
+* the probability of a variable to be in the range of $$[\mu-\sigma,\mu+\sigma]$$ is 68.27%
+* the probability of a variable to be in the range of $$(-\infty,\mu]$$ or $$(\mu,\infty)$$ is 50.00%
 
 <div id="double-slider"></div>
 <div id="gaussProba" style="width:100%;height:400px"></div>
@@ -299,28 +301,34 @@ Some interesting properties of normal distribution:
 
 ### Multiple measurements
 
+Now, let's get back to the Kalman filter and the drone example. The altitude given by our pressure sensor can be modeled as a normal distribution $$ \color{#ff8000}{\mathcal{N}_{s} (\mu_{s}, \sigma_{s}^2 )} $$ with $$s$$ for sensor; it also can be calculated given motion equations that define the model $$ \color{royalblue}{\mathcal{N}_{m} (\mu_{m}, \sigma_{m}^2 )} $$. These distributions represent probability distributions and to combine them, we need to use the probability rule of product:
+
 $$
-\begin{equation} \label{fusionformula} 
+\begin{equation} \label{fusionformula_1} 
 \begin{aligned} 
-\color{royalblue}{\mu} &= \frac{\sigma_2^2 \mu_1 + \sigma_1^2 \mu_2} {\sigma_1^2 + \sigma_2^2}\\ 
-\color{royalblue}{\sigma^2} &= \frac{\sigma_1^2 \sigma_2^2} {\sigma_1^2 + \sigma_2^2} 
+P &= \color{royalblue}{\mathcal{N}_{m} (\mu_{m}, \sigma_{m}^2 )} \cdot \color{#ff8000}{\mathcal{N}_{s} (\mu_{s}, \sigma_{s}^2 )}\\
+  &= \mathcal{N} (\mu, \sigma^2 )
 \end{aligned} 
 \end{equation}
 $$
+
+with
 
 $$
 \begin{equation} \label{fusionformularearranged} 
 \begin{aligned} 
-\color{royalblue}{\mu’} &= \mu_0 + \frac{\sigma_0^2 (\mu_1 – \mu_0)} {\sigma_0^2 + \sigma_1^2}\\ 
-\color{mediumblue}{\sigma’}^2 &= \sigma_0^2 – \frac{\sigma_0^4} {\sigma_0^2 + \sigma_1^2} 
+\mu &= \frac{\sigma_s^2 \mu_m + \sigma_m^2 \mu_s} {\sigma_m^2 + \sigma_s^2}\\ 
+\sigma &= \frac{\sigma_m^2 \sigma_s^2} {\sigma_m^2 + \sigma_s^2}
 \end{aligned} 
 \end{equation}
 $$
 
-| $$ \mathcal{N}_1 $$ | $$ \mathcal{N}_2 $$| $$ \mathcal{N}_1 \mathcal{N}_2 $$ |
+Let's use the following graph to get the intuition behind these expressions:
+
+| $$ \color{royalblue}{\mathcal{N}_{m}} $$ | $$ \color{#ff8000}{\mathcal{N}_{s}} $$| $$ \color{royalblue}{\mathcal{N}_{m}} \cdot \color{#ff8000}{\mathcal{N}_{s}} $$ |
 |:----:|:----:|:----:|
-| $$\mu_1 = $$ <output id="mean1value"></output> <input class="slider" style="background: #70D6FF;" type="range" id="mean1"  min="2" max="8" step="0.01" value="4"   oninput="updateGauss1()"> | $$\mu_2 = $$ <output id="mean2value"></output> <input class="slider" style="background: #F4E773;" type="range" id="mean2"  min="2" max="8" step="0.01" value="6"   oninput="updateGauss2()"> | $$ \mu = $$ <b><output id="meanRvalue"></output></b> |
-| $$\sigma_1 = $$ <output id="sigma1value"></output> <input class="slider" style="background: #70D6FF;" type="range" id="sigma1" min="0.2" max="2" step="0.01" value="0.25" oninput="updateGauss1()"> | $$\sigma_2 = $$ <output id="sigma2value"></output> <input class="slider" style="background: #F4E773;" type="range" id="sigma2" min="0.2" max="2" step="0.01" value="0.4" oninput="updateGauss2()"> | $$ \sigma = $$ <b><output id="sigmaRvalue"></output></b>|
+| $$\color{royalblue}{\mu_m} = $$ <output id="mean1value"></output> <input class="slider" style="background: #70D6FF;" type="range" id="mean1"  min="2" max="8" step="0.01" value="4"   oninput="updateGauss1()"> | $$ \color{#ff8000}{\mu_s} = $$ <output id="mean2value"></output> <input class="slider" style="background: #F4E773;" type="range" id="mean2"  min="2" max="8" step="0.01" value="6"   oninput="updateGauss2()"> | $$ \mu = $$ <output id="meanRvalue"></output> |
+| $$\color{royalblue}{\sigma_m} = $$ <output id="sigma1value"></output> <input class="slider" style="background: #70D6FF;" type="range" id="sigma1" min="0.2" max="2" step="0.01" value="0.25" oninput="updateGauss1()"> | $$ \color{#ff8000}{\sigma_s} = $$ <output id="sigma2value"></output> <input class="slider" style="background: #F4E773;" type="range" id="sigma2" min="0.2" max="2" step="0.01" value="0.4" oninput="updateGauss2()"> | $$ \sigma = $$<output id="sigmaRvalue"></output>|
 
 <div id="gaussCombination" class="graph_responsive"></div>
 <script>
@@ -377,19 +385,19 @@ $$
         dashStyle: 'shortdot',
         shadow: false,
         useHTML: true,
-        name: '<span id="MJXc-Node-238" class="mjx-msubsup"><span class="mjx-base" style="margin-right: -0.159em;"><span id="MJXc-Node-239" class="mjx-texatom"><span id="MJXc-Node-240" class="mjx-mrow"><span id="MJXc-Node-241" class="mjx-mi"><span class="mjx-char MJXc-TeX-cal-R" style="padding-top: 0.505em; padding-bottom: 0.354em; padding-right: 0.159em;">N</span></span></span></span></span><span class="mjx-sub" style="font-size: 100%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-242" class="mjx-mn" style=""><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.354em; padding-bottom: 0.354em;">1</span></span></span></span>',
+        name: '<span id="MJXc-Node-238" class="mjx-msubsup"><span class="mjx-base" style="margin-right: -0.159em;"><span id="MJXc-Node-239" class="mjx-texatom"><span id="MJXc-Node-240" class="mjx-mrow"><span id="MJXc-Node-241" class="mjx-mi"><span class="mjx-char MJXc-TeX-cal-R" style="padding-top: 0.505em; padding-bottom: 0.354em; padding-right: 0.159em;">N</span></span></span></span></span><span class="mjx-sub" style="font-size: 100%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-242" class="mjx-mn" style=""><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.354em; padding-bottom: 0.354em;">m</span></span></span></span>',
         color: colors[0],
         data: [],
     }, {
         dashStyle: 'shortdot',
         shadow: false,
         useHTML: true,
-        name: '<span id="MJXc-Node-238" class="mjx-msubsup"><span class="mjx-base" style="margin-right: -0.159em;"><span id="MJXc-Node-239" class="mjx-texatom"><span id="MJXc-Node-240" class="mjx-mrow"><span id="MJXc-Node-241" class="mjx-mi"><span class="mjx-char MJXc-TeX-cal-R" style="padding-top: 0.505em; padding-bottom: 0.354em; padding-right: 0.159em;">N</span></span></span></span></span><span class="mjx-sub" style="font-size: 100%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-242" class="mjx-mn" style=""><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.354em; padding-bottom: 0.354em;">2</span></span></span></span>',
+        name: '<span id="MJXc-Node-238" class="mjx-msubsup"><span class="mjx-base" style="margin-right: -0.159em;"><span id="MJXc-Node-239" class="mjx-texatom"><span id="MJXc-Node-240" class="mjx-mrow"><span id="MJXc-Node-241" class="mjx-mi"><span class="mjx-char MJXc-TeX-cal-R" style="padding-top: 0.505em; padding-bottom: 0.354em; padding-right: 0.159em;">N</span></span></span></span></span><span class="mjx-sub" style="font-size: 100%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-242" class="mjx-mn" style=""><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.354em; padding-bottom: 0.354em;">s</span></span></span></span>',
         color: colors[1],
         data: []
     }, {
         useHTML: true,
-        name: '<span id="MJXc-Node-238" class="mjx-msubsup"><span class="mjx-base" style="margin-right: -0.159em;"><span id="MJXc-Node-239" class="mjx-texatom"><span id="MJXc-Node-240" class="mjx-mrow"><span id="MJXc-Node-241" class="mjx-mi"><span class="mjx-char MJXc-TeX-cal-R" style="padding-top: 0.505em; padding-bottom: 0.354em; padding-right: 0.159em;">N</span></span></span></span></span><span class="mjx-sub" style="font-size: 100%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-242" class="mjx-mn" style=""><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.354em; padding-bottom: 0.354em;">1</span></span></span></span><span id="MJXc-Node-238" class="mjx-msubsup"><span class="mjx-base" style="margin-right: -0.159em;"><span id="MJXc-Node-239" class="mjx-texatom"><span id="MJXc-Node-240" class="mjx-mrow"><span id="MJXc-Node-241" class="mjx-mi"><span class="mjx-char MJXc-TeX-cal-R" style="padding-top: 0.505em; padding-bottom: 0.354em; padding-right: 0.159em;">N</span></span></span></span></span><span class="mjx-sub" style="font-size: 100%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-242" class="mjx-mn" style=""><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.354em; padding-bottom: 0.354em;">2</span></span></span></span>',
+        name: '<span id="MJXc-Node-238" class="mjx-msubsup"><span class="mjx-base" style="margin-right: -0.159em;"><span id="MJXc-Node-239" class="mjx-texatom"><span id="MJXc-Node-240" class="mjx-mrow"><span id="MJXc-Node-241" class="mjx-mi"><span class="mjx-char MJXc-TeX-cal-R" style="padding-top: 0.505em; padding-bottom: 0.354em; padding-right: 0.159em;">N</span></span></span></span></span><span class="mjx-sub" style="font-size: 100%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-242" class="mjx-mn" style=""><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.354em; padding-bottom: 0.354em;">m</span></span></span></span><span id="MJXc-Node-238" class="mjx-msubsup"><span class="mjx-base" style="margin-right: -0.159em;"><span id="MJXc-Node-239" class="mjx-texatom"><span id="MJXc-Node-240" class="mjx-mrow"><span id="MJXc-Node-241" class="mjx-mi"><span class="mjx-char MJXc-TeX-cal-R" style="padding-top: 0.505em; padding-bottom: 0.354em; padding-right: 0.159em;">N</span></span></span></span></span><span class="mjx-sub" style="font-size: 100%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-242" class="mjx-mn" style=""><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.354em; padding-bottom: 0.354em;">s</span></span></span></span>',
         lineWidth: 2,
         color: colors[2],
         data: []
@@ -522,11 +530,18 @@ $$
 }
 </script>
 
+Note that:
+- the resulting distribution is also a normal distribution
+- the mean of the new resulting distribution is located always "in between" the two initial means and closer to the distribution with lower variance (lower uncertainty). The lower the variance, the more we "trust" the given source of the information. 
+- it has a variance smaller than each individual variance of the measurement or the model. Given more sources of information, we become more and more certain about the state of our system, the altitude of the drone
+
+While in the example above we have only one variable, the Kalman filter often works with systems defined by many variables. Multidimensional Kalman filter involves some linear algebra but the main principle stays the same: get the information from different sources in the form of a normal distribution and then combine it to get a result with higher certainty/smaller variance. 
+
 > **KEY TAKEAWAYS**
 > 
-> 1. Lorem ipsum dolor sit amet, consectetur adipiscing elit
-> 2. Lorem ipsum dolor sit amet, consectetur adipiscing elit
-> 3. Lorem ipsum dolor sit amet, consectetur adipiscing elit
+> * Kalman filter allows combining multiple sources of information about the system to provide an optimal estimate of the system state.
+> * Each piece of information needs to be presented in the form of a normal distribution defined by a mean and a variance.
+> * A product of two normal distributions is also a normal distribution with smaller variance.
 {:.keypoints}
 
 
